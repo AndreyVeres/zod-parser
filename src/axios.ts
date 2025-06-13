@@ -10,12 +10,19 @@ export const API_ENDPOINTS = {
   TODOS: 'todos',
 };
 
-export const axiosRequest = async <T>(url: string, options: { schema?: ZodSchema; method: 'get' | 'post' }) => {
-  try {
-    const { data } = await axiosInstance[options?.method]<T>(url);
+type Props = {
+  url: string;
+  options: { schema?: ZodSchema; method: 'get' | 'post' };
+};
 
-    if (options?.schema) {
-      ZodParser.parse(options.schema, data);
+export const axiosRequest = async <T>({ url, options }: Props) => {
+  const { schema, method = 'get' } = options;
+
+  try {
+    const { data } = await axiosInstance[method]<T>(url);
+
+    if (schema) {
+      ZodParser.parse(schema, data);
     }
 
     return data;
