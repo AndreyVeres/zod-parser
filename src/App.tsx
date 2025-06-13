@@ -6,7 +6,8 @@ const todoSchema = z.object({
   completed: z.boolean(),
   id: z.number(),
   title: z.string(),
-  userId: z.number(),
+  // userId: z.number(),
+  userId: z.string(),
 });
 
 type Todo = z.infer<typeof todoSchema>;
@@ -17,7 +18,7 @@ function App() {
   useEffect(() => {
     axiosRequest<Todo[]>(API_ENDPOINTS.TODOS, {
       method: 'get',
-      schema: todoSchema,
+      schema: todoSchema.array(),
     }).then(result => {
       setTodos(result);
     });
